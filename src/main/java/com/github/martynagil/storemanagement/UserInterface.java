@@ -1,4 +1,4 @@
-package storeManagement;
+package com.github.martynagil.storemanagement;
 
 public class UserInterface {
 
@@ -6,8 +6,10 @@ public class UserInterface {
     private int[] menu = {0, 1, 2, 3};
 
     public void run() {
-        console.printMenu();
-        choiceMenu(console.enterChoice());
+        do {
+            console.printMenu();
+            action(choiceMenu(console.enterChoice()));
+        }while (choiceMenu(console.enterChoice()) != 0);
     }
 
     private int choiceMenu(int choice) {
@@ -19,15 +21,16 @@ public class UserInterface {
     }
 
     private void action(int choice) {
+        ActionsWithProducts action = new ActionsWithProducts();
         switch (choice) {
             case 0:
                 console.printGoodbye();
             case 1:
-                Products.show();
+                action.show();
             case 2:
-                Products.add();
+                action.add();
             case 3:
-                Products.delete();
+                action.delete();
 
         }
     }
