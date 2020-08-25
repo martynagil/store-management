@@ -1,21 +1,27 @@
 package com.github.martynagil.storemanagement;
 
+import sun.awt.windows.WPrinterJob;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ActionsWithProducts {
     
     private Console console = new Console();
 
-    public void show() {
-        // TODO: 17.08.2020
-    }
+    private List<Product> products = new ArrayList<Product>();
 
+    public void show() {
+        products.forEach(System.out::print);
+    }
     public void add() {
         String name = console.askForNameAndReturnIt();
         String brand = console.askForBrandAndReturnIt();
         String type = console.askForTypeAndReturnIt();
         Double price = console.askForPriceAndReturnIt();
-        new Product(name, brand, type, price);
+        Product product = new Product(name, brand, type, price);
 
-        // TODO: 17.08.2020  
+        products.add(product);
     }
 
     public void delete() {
