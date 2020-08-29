@@ -1,19 +1,22 @@
 package com.github.martynagil.storemanagement;
 
-import sun.awt.windows.WPrinterJob;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActionsWithProducts {
-    
+public class ProductService {
+
     private Console console = new Console();
 
     private List<Product> products = new ArrayList<Product>();
 
     public void show() {
-        products.forEach(System.out::print);
+        int index = 0;
+        for (Product product : products) {
+            System.out.println(index + 1 + " " + product.toString());
+            index++;
+        }
     }
+
     public void add() {
         String name = console.askForNameAndReturnIt();
         String brand = console.askForBrandAndReturnIt();
@@ -25,6 +28,9 @@ public class ActionsWithProducts {
     }
 
     public void delete() {
-        // TODO: 17.08.2020 
+        show();
+        int index = console.askForIndexOfProductAndReturnIt();
+        products.remove(index - 1);
     }
 }
+// TODO: 29.08.2020 zrobić zapisywanie do jsona

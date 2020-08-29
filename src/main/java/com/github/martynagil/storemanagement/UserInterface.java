@@ -1,37 +1,28 @@
 package com.github.martynagil.storemanagement;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserInterface {
 
     private Console console = new Console();
-    private int[] menu = {0, 1, 2, 3};
+    private ProductService action = new ProductService();
+    private Map<Integer, MenuAction> menuActions = new HashMap<>();
 
     public void run() {
+        initMenu();
+        int choice;
         do {
             console.printMenu();
-            action(choiceMenu(console.enterChoice()));
-        }while (choiceMenu(console.enterChoice()) != 0);
+            choice = console.askForMenuChoice();
+            menuActions.get(choice).run();
+        } while (choice != 0);
     }
 
-    private int choiceMenu(int choice) {
-        try {
-            return menu[choice];
-        } catch (Exception e) {
-            throw new IllegalStateException("Give proper number [0-3]");
-        }
-    }
-
-    private void action(int choice) {
-        ActionsWithProducts action = new ActionsWithProducts();
-        switch (choice) {
-            case 0:
-                console.printGoodbye();
-            case 1:
-                action.show();
-            case 2:
-                action.add();
-            case 3:
-                action.delete();
-
-        }
+    private void initMenu() {
+        menuActions.put(0, () -> console.printGoodbye());
+        menuActions.put(1, () -> action.show());
+        menuActions.put(2, () -> action.add());
+        menuActions.put(3, () -> action.delete());
     }
 }

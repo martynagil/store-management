@@ -1,5 +1,6 @@
 package com.github.martynagil.storemanagement;
 
+import java.lang.ref.SoftReference;
 import java.util.Scanner;
 
 public class Console {
@@ -7,7 +8,7 @@ public class Console {
     private Scanner scanner = new Scanner(System.in);
 
     public void printMenu() {
-        System.out.print("[1] Show products");
+        System.out.println("[1] Show products");
         System.out.println("[2] Add product");
         System.out.println("[3] Delete product");
         System.out.println("[0] Exit");
@@ -15,7 +16,7 @@ public class Console {
         System.out.println("Your choice:");
     }
 
-    public int enterChoice() {
+    public int askForMenuChoice() {
        return scanner.nextInt();
     }
 
@@ -41,5 +42,10 @@ public class Console {
     public double askForPriceAndReturnIt() {
         System.out.print("Enter the price: ");
         return scanner.nextDouble();
+    }
+
+    public int askForIndexOfProductAndReturnIt() {
+        System.out.println("Enter the index: ");
+        return scanner.nextInt();
     }
 }
