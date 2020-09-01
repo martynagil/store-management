@@ -24,28 +24,18 @@ public class Console {
         System.out.println("Goodbye!");
     }
 
-    public String askForNameAndReturnIt() {
-        System.out.print("Enter the name of product: ");
+    public String askForString(String message) {
+        System.out.println(message);
         return scanner.nextLine();
     }
 
-    public String askForBrandAndReturnIt() {
-        System.out.print("Enter the name of brand: ");
-        return scanner.nextLine();
-    }
-
-    public String askForTypeAndReturnIt() {
-        System.out.print("Enter the type: ");
-        return scanner.nextLine();
-    }
-
-    public double askForPriceAndReturnIt() {
-        System.out.print("Enter the price: ");
+    public double askForDouble(String message) {
+        System.out.println(message);
         return scanner.nextDouble();
     }
 
-    public int askForIndexOfProductAndReturnIt() {
-        System.out.println("Enter the index: ");
+    public int askForInt(String message) {
+        System.out.println(message);
         return scanner.nextInt();
     }
 }
