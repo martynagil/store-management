@@ -38,4 +38,8 @@ public class Console {
         System.out.println(message);
         return scanner.nextInt();
     }
+
+    public void writeMessage(String msg) {
+        System.out.println(msg);
+    }
 }

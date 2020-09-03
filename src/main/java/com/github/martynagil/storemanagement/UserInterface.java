@@ -1,35 +1,50 @@
 package com.github.martynagil.storemanagement;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class UserInterface {
 
-    private Console console = new Console();
-    private ProductService productService = new ProductService();
-    private Map<Integer, MenuAction> menuActions = new HashMap<>();
+    private Console console;
+    private ProductService productService;
 
-    public void run() {
-        initMenu();
-        int choice;
-        if (productService.saveExist()) {
-            productService.loadSave();
-            productService.deleteSave();
-        }
-        do {
-            console.printMenu();
-            choice = console.askForMenuChoice();
-            menuActions.get(choice).run();
-        } while (choice != 0);
-        if (productService.returnListLength() != 0) {
-            productService.saveProductList();
+    public UserInterface(Console console, ProductService productService) {
+
+        this.console = console;
+        this.productService = productService;
+    }
+
+    public void exit() {
+        console.printGoodbye();
+    }
+
+    public void printMenu() {
+        console.printMenu();
+    }
+
+    public int askForMenuChoice() {
+        return console.askForMenuChoice();
+    }
+
+    public void showProducts() {
+        int index = 0;
+        for (Product product : productService.getAllProducts()) {
+            console.writeMessage(index + 1 + " " + product.toString());
+            index++;
         }
     }
 
-    private void initMenu() {
-        menuActions.put(0, () -> console.printGoodbye());
-        menuActions.put(1, () -> productService.show());
-        menuActions.put(2, () -> productService.add());
-        menuActions.put(3, () -> productService.delete());
+    public void addProduct() {
+        String name = console.askForString("Enter the name of product: ");
+        String brand = console.askForString("Enter the name of brand: ");
+        String type = console.askForString("Enter the type: ");
+        String barcode = console.askForString("Enter the barcode: ");
+        double price = console.askForDouble("Enter the price: ");
+        Product product = new Product(name, brand, type, barcode, price);
+
+        productService.addProduct(product);
+    }
+
+    public void deleteProduct() {
+        showProducts();
+        int index = console.askForInt("Enter the index: ");
+        productService.removeByIndex(index - 1);
     }
 }
