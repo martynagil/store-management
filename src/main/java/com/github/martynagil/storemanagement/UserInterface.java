@@ -50,9 +50,15 @@ public class UserInterface {
     public void searchProduct() {
         String name = console.askForString("Enter the name of product: ");
         List<Product> matchingElements = productService.getAllProducts().stream()
-                .filter(product -> product.getName().toLowerCase().contains((name).toLowerCase()))
+                .filter(product -> product.getName().toLowerCase().contains((name).toLowerCase())
+                        || product.getBrand().toLowerCase().contains((name).toLowerCase())
+                        || product.getType().toLowerCase().contains((name).toLowerCase()))
                 .collect(Collectors.toList());
         showProducts(matchingElements);
+    }
+
+    public void modifyProduct() {
+// TODO: 23.09.2020  
     }
 
     private void showProducts(List<Product> products) {
