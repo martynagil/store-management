@@ -13,12 +13,12 @@ import java.util.List;
 
 public class JsonProductRepository implements ProductRepository {
 
-    private static final Path SAVE_PATH = Paths.get("saveProductList.json");
-
+    private Path savePath;
     private ObjectMapper objectMapper = new ObjectMapper();
     private List<Product> products = new ArrayList<>();
 
-    public JsonProductRepository() {
+    public JsonProductRepository(Path savePath) {
+        this.savePath = savePath;
         if (dataExist()) {
             loadData();
         }
@@ -44,7 +44,7 @@ public class JsonProductRepository implements ProductRepository {
     private void writeData() {
         try {
             String json = objectMapper.writeValueAsString(products);
-            Files.write(SAVE_PATH, json.getBytes());
+            Files.write(savePath, json.getBytes());
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
@@ -52,7 +52,7 @@ public class JsonProductRepository implements ProductRepository {
 
     private void loadData() {
         try {
-            byte[] bytes = Files.readAllBytes(SAVE_PATH);
+            byte[] bytes = Files.readAllBytes(savePath);
             products = objectMapper.readValue(bytes, new TypeReference<List<Product>>() {});
         } catch (IOException e) {
             throw new IllegalStateException(e);
@@ -60,7 +60,7 @@ public class JsonProductRepository implements ProductRepository {
     }
 
     private boolean dataExist() {
-        return Files.exists(SAVE_PATH);
+        return Files.exists(savePath);
     }
 
 }

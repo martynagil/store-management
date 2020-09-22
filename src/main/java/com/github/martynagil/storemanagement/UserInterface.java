@@ -1,5 +1,8 @@
 package com.github.martynagil.storemanagement;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class UserInterface {
 
     private Console console;
@@ -20,15 +23,11 @@ public class UserInterface {
     }
 
     public int askForMenuChoice() {
-        return console.askForMenuChoice();
+        return console.askForInt("Your choice:");
     }
 
     public void showProducts() {
-        int index = 0;
-        for (Product product : productService.getAllProducts()) {
-            console.writeMessage(index + 1 + " " + product.toString());
-            index++;
-        }
+        showProducts(productService.getAllProducts());
     }
 
     public void addProduct() {
@@ -46,5 +45,22 @@ public class UserInterface {
         showProducts();
         int index = console.askForInt("Enter the index: ");
         productService.removeByIndex(index - 1);
+    }
+
+    public void searchProduct() {
+        String name = console.askForString("Enter the name of product: ");
+        List<Product> matchingElements = productService.getAllProducts().stream()
+                .filter(product -> product.getName().toLowerCase().contains((name).toLowerCase()))
+                .collect(Collectors.toList());
+        showProducts(matchingElements);
+    }
+
+    private void showProducts(List<Product> products) {
+        int index = 0;
+        for (Product product : products) {
+            console.writeMessage(index + 1 + " " + product.toString());
+            index++;
+        }
+        System.out.println();
     }
 }

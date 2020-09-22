@@ -23,13 +23,19 @@ public class Application {
     }
 
     private void initMenu() {
-        menuActions.put(0, () -> userInterface.exit());
+        menuActions.put(0, new MenuAction() {
+            @Override
+            public void run() {
+                userInterface.exit();
+            }
+        });
         menuActions.put(1, () -> userInterface.showProducts());
         menuActions.put(2, () -> userInterface.addProduct());
         menuActions.put(3, () -> userInterface.deleteProduct());
+        menuActions.put(4, () -> userInterface.searchProduct());
     }
 }
 
 // TODO: 03.09.2020 czy plik ma zawartość
-// TODO: 02.09.2020 pooglądać na youtube o mockito
 // TODO: 29.08.2020 zmodyfikować metodę save o parametr mówiący o folderze, żeby się nie nadpisywało
+// TODO: 21.09.2020 modyfikacja produktu
