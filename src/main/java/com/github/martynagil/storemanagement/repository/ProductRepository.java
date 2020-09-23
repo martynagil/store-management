@@ -11,4 +11,6 @@ public interface ProductRepository {
     void save(Product product);
 
     void removeByIndex(int index);
+
+    void modifyByIndex(int index);
 }

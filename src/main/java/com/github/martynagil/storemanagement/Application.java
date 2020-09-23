@@ -30,9 +30,9 @@ public class Application {
             }
         });
         menuActions.put(1, () -> userInterface.showProducts());
-        menuActions.put(2, () -> userInterface.addProduct());
-        menuActions.put(3, () -> userInterface.deleteProduct());
-        menuActions.put(4, () -> userInterface.searchProduct());
+        menuActions.put(2, () -> userInterface.add());
+        menuActions.put(3, () -> userInterface.delete());
+        menuActions.put(4, () -> userInterface.search());
     }
 }
 

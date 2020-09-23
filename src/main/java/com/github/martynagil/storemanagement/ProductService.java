@@ -16,11 +16,15 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public void addProduct(Product product) {
+    public void addToRepository(Product product) {
         productRepository.save(product);
     }
 
     public void removeByIndex(int index) {
         productRepository.removeByIndex(index);
+    }
+
+    public void modify(int index) {
+        productRepository.modifyByIndex(index);
     }
 }

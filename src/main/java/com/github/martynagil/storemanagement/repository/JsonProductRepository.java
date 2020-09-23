@@ -31,6 +31,11 @@ public class JsonProductRepository implements ProductRepository {
     }
 
     @Override
+    public void modifyByIndex(int index) {
+
+    }
+
+    @Override
     public void save(Product product) {
         products.add(product);
         writeData();

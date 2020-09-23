@@ -30,7 +30,7 @@ public class UserInterface {
         showProducts(productService.getAllProducts());
     }
 
-    public void addProduct() {
+    public void add() {
         String name = console.askForString("Enter the name of product: ");
         String brand = console.askForString("Enter the name of brand: ");
         String type = console.askForString("Enter the type: ");
@@ -38,35 +38,57 @@ public class UserInterface {
         double price = console.askForDouble("Enter the price: ");
         Product product = new Product(name, brand, type, barcode, price);
 
-        productService.addProduct(product);
+        productService.addToRepository(product);
     }
 
-    public void deleteProduct() {
+    public void delete() {
         showProducts();
         int index = console.askForInt("Enter the index: ");
         productService.removeByIndex(index - 1);
     }
 
-    public void searchProduct() {
+    public void search() {
+        showProducts(listSearch());
+    }
+
+    public void modifyProduct() {
+        search();
+        List<Product> list = listSearch();
+        int choice;
+        if (list.size() > 1) {
+            choice = console.askForInt("Enter your choice") - 1;
+        } else {
+            choice = 0;
+        }
+
+        // TODO: 24.09.2020 co konkretnie się chce zmodyfikować na co
+        productService.modify(indexFromId(list.get(choice).getId()));
+    }
+
+    private void showProducts(List<Product> products) {
+        int index = 1;
+        for (Product product : products) {
+            console.writeMessage(index + " " + product.toString());
+            index++;
+        }
+        System.out.println();
+    }
+
+    private List<Product> listSearch() {
         String name = console.askForString("Enter the name of product: ");
         List<Product> matchingElements = productService.getAllProducts().stream()
                 .filter(product -> product.getName().toLowerCase().contains((name).toLowerCase())
                         || product.getBrand().toLowerCase().contains((name).toLowerCase())
                         || product.getType().toLowerCase().contains((name).toLowerCase()))
                 .collect(Collectors.toList());
-        showProducts(matchingElements);
+        return matchingElements;
     }
 
-    public void modifyProduct() {
-// TODO: 23.09.2020  
-    }
-
-    private void showProducts(List<Product> products) {
+    private int indexFromId(String id) {
         int index = 0;
-        for (Product product : products) {
-            console.writeMessage(index + 1 + " " + product.toString());
+        while (!productService.getAllProducts().get(index).getId().equals(id)) {
             index++;
         }
-        System.out.println();
+        return index;
     }
 }
