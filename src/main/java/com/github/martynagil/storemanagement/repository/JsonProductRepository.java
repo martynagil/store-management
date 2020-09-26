@@ -2,14 +2,16 @@ package com.github.martynagil.storemanagement.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.martynagil.storemanagement.MenuAction;
 import com.github.martynagil.storemanagement.Product;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class JsonProductRepository implements ProductRepository {
 
@@ -31,8 +33,9 @@ public class JsonProductRepository implements ProductRepository {
     }
 
     @Override
-    public void modifyByIndex(int index) {
-
+    public void modifyByIndex(int index, int category, String newData) {
+        Map<Integer, MenuAction> map = makeMap(index, newData);
+        map.get(category).run();
     }
 
     @Override
@@ -44,6 +47,17 @@ public class JsonProductRepository implements ProductRepository {
     @Override
     public List<Product> findAll() {
         return products;
+    }
+
+    private Map<Integer, MenuAction> makeMap(int index, String newData) {
+        Map<Integer, MenuAction> menuActions = new HashMap<>();
+        menuActions.put(1, () -> products.get(index).setName(newData));
+        menuActions.put(2, () -> products.get(index).setBrand(newData));
+        menuActions.put(3, () -> products.get(index).setType(newData));
+        menuActions.put(4, () -> products.get(index).setBarcode(newData));
+        menuActions.put(5, () -> products.get(index).setPrice(newData));
+
+        return menuActions;
     }
 
     private void writeData() {
@@ -58,7 +72,8 @@ public class JsonProductRepository implements ProductRepository {
     private void loadData() {
         try {
             byte[] bytes = Files.readAllBytes(savePath);
-            products = objectMapper.readValue(bytes, new TypeReference<List<Product>>() {});
+            products = objectMapper.readValue(bytes, new TypeReference<List<Product>>() {
+            });
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }

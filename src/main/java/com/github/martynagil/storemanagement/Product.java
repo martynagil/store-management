@@ -69,6 +69,34 @@ public class Product {
                 ", price=" + price +
                 '}';
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public void setPrice(String cost) {
+        try {
+            double price = Double.parseDouble(cost);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Number required");
+        }
+        this.price = price;
+    }
 }
 
-// uuid

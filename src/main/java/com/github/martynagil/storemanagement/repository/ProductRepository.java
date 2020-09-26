@@ -12,5 +12,5 @@ public interface ProductRepository {
 
     void removeByIndex(int index);
 
-    void modifyByIndex(int index);
+    void modifyByIndex(int index, int category, String newData);
 }

@@ -18,6 +18,9 @@ public class Application {
         do {
             userInterface.printMenu();
             choice = userInterface.askForMenuChoice();
+            if (choice > 4) {
+                throw new IndexOutOfBoundsException();
+            }
             menuActions.get(choice).run();
         } while (choice != 0);
     }
@@ -37,6 +40,5 @@ public class Application {
 }
 
 // TODO: 03.09.2020 czy plik ma zawartość
-// TODO: 21.09.2020 modyfikacja produktu
 // TODO: 23.09.2020 Przy wyświetlaniu produktów posortuj je po marce oraz nazwie (tej samej marki produkty koło siebie i w obrębie marki posortowane po nazwie)
 // TODO: 23.09.2020 Zrób testy, skup się na serwisie oraz repozytorium

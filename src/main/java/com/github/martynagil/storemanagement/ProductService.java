@@ -24,7 +24,7 @@ public class ProductService {
         productRepository.removeByIndex(index);
     }
 
-    public void modify(int index) {
-        productRepository.modifyByIndex(index);
+    public void modify(int index, int category, String newData) {
+        productRepository.modifyByIndex(index, category, newData);
     }
 }

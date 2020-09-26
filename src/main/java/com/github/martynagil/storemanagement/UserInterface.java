@@ -1,6 +1,8 @@
 package com.github.martynagil.storemanagement;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class UserInterface {
@@ -54,15 +56,24 @@ public class UserInterface {
     public void modifyProduct() {
         search();
         List<Product> list = listSearch();
-        int choice;
-        if (list.size() > 1) {
-            choice = console.askForInt("Enter your choice") - 1;
-        } else {
-            choice = 0;
-        }
+        int choice = chooseItem(list);
+        console.printCategories();
+        int category = console.askForInt("Choose category to change: ");
+        String newData = console.askForString("Enter what do you want to change the data for: ");
 
-        // TODO: 24.09.2020 co konkretnie się chce zmodyfikować na co
-        productService.modify(indexFromId(list.get(choice).getId()));
+        productService.modify(indexFromId(list.get(choice).getId()), category, newData);
+    }
+
+    private int chooseItem(List<Product> list) {
+        int choice;
+        if (list.size() == 0) {
+            return 0;
+        }
+        choice = console.askForInt("Enter your choice") - 1;
+        if (choice >= list.size()) {
+            throw new IndexOutOfBoundsException();
+        }
+        return choice;
     }
 
     private void showProducts(List<Product> products) {
