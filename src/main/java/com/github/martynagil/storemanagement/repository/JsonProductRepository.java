@@ -8,10 +8,8 @@ import com.github.martynagil.storemanagement.Product;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class JsonProductRepository implements ProductRepository {
 
@@ -36,6 +34,7 @@ public class JsonProductRepository implements ProductRepository {
     public void modifyByIndex(int index, int category, String newData) {
         Map<Integer, MenuAction> map = makeMap(index, newData);
         map.get(category).run();
+        sort();
     }
 
     @Override
@@ -62,6 +61,7 @@ public class JsonProductRepository implements ProductRepository {
 
     private void writeData() {
         try {
+            sort();
             String json = objectMapper.writeValueAsString(products);
             Files.write(savePath, json.getBytes());
         } catch (IOException e) {
@@ -74,6 +74,7 @@ public class JsonProductRepository implements ProductRepository {
             byte[] bytes = Files.readAllBytes(savePath);
             products = objectMapper.readValue(bytes, new TypeReference<List<Product>>() {
             });
+            sort();
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
@@ -81,6 +82,10 @@ public class JsonProductRepository implements ProductRepository {
 
     private boolean dataExist() {
         return Files.exists(savePath);
+    }
+
+    private void sort() {
+        Collections.sort(products);
     }
 
 }

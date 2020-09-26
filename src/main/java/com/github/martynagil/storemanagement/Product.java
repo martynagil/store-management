@@ -2,11 +2,11 @@ package com.github.martynagil.storemanagement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import org.apache.commons.lang3.builder.CompareToBuilder;
 
 import java.util.UUID;
 
-public class Product {
+public class Product implements Comparable<Product> {
 
     private String id;
     private String name;
@@ -97,6 +97,14 @@ public class Product {
             throw new IllegalArgumentException("Number required");
         }
         this.price = price;
+    }
+
+    @Override
+    public int compareTo(Product o) {
+        return new CompareToBuilder()
+                .append(this.brand, o.brand)
+                .append(this.name, o.name)
+                .build();
     }
 }
 
