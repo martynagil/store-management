@@ -4,6 +4,8 @@ import com.github.martynagil.storemanagement.repository.ProductRepository;
 
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 public class ProductService {
 
     private ProductRepository productRepository;
@@ -20,11 +22,27 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public void removeByIndex(int index) {
-        productRepository.removeByIndex(index);
+    public void remove(Product product) {
+        productRepository.removeById(product.getId());
     }
 
     public void modify(int index, int category, String newData) {
         productRepository.modifyByIndex(index, category, newData);
+    }
+
+    public List<Product> searchByText(String text) {
+        return getAllProducts().stream()
+                .filter(product -> matchesCriteria(text, product))
+                .collect(toList());
+    }
+
+    private boolean matchesCriteria(String text, Product product) {
+        return product.getName().toLowerCase().contains((text).toLowerCase())
+                || product.getBrand().toLowerCase().contains((text).toLowerCase())
+                || product.getType().toLowerCase().contains((text).toLowerCase());
+    }
+
+    public void save(Product product) {
+        productRepository.save(product);
     }
 }

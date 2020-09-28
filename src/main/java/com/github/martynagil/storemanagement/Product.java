@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 
 import java.util.UUID;
 
-public class Product implements Comparable<Product> {
+public class Product {
 
     private String id;
     private String name;
@@ -92,19 +92,11 @@ public class Product implements Comparable<Product> {
 
     public void setPrice(String cost) {
         try {
-            double price = Double.parseDouble(cost);
+            price = Double.parseDouble(cost);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Number required");
+            throw new IllegalArgumentException("Number required", e);
         }
-        this.price = price;
     }
 
-    @Override
-    public int compareTo(Product o) {
-        return new CompareToBuilder()
-                .append(this.brand, o.brand)
-                .append(this.name, o.name)
-                .build();
-    }
 }
 

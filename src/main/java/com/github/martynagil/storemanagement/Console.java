@@ -16,7 +16,7 @@ public class Console {
         System.out.println();
     }
 
-    public void printCategories() {
+    public void printAttributes() {
         System.out.println("[1] Name of product");
         System.out.println("[2] Name of brand");
         System.out.println("[3] Type");

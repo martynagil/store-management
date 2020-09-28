@@ -10,7 +10,5 @@ public interface ProductRepository {
 
     void save(Product product);
 
-    void removeByIndex(int index);
-
-    void modifyByIndex(int index, int category, String newData);
+    void removeById(String id);
 }

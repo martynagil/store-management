@@ -8,8 +8,10 @@ import com.github.martynagil.storemanagement.Product;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class JsonProductRepository implements ProductRepository {
 
@@ -25,21 +27,18 @@ public class JsonProductRepository implements ProductRepository {
     }
 
     @Override
-    public void removeByIndex(int index) {
-        products.remove(index);
+    public void removeById(String id) {
+        products.removeIf(product -> product.getId().equals(id));
         writeData();
     }
 
     @Override
-    public void modifyByIndex(int index, int category, String newData) {
-        Map<Integer, MenuAction> map = makeMap(index, newData);
-        map.get(category).run();
-        sort();
-    }
-
-    @Override
     public void save(Product product) {
-        products.add(product);
+        if (exists(product)) {
+            update(product);
+        } else {
+            products.add(product);
+        }
         writeData();
     }
 
@@ -48,20 +47,23 @@ public class JsonProductRepository implements ProductRepository {
         return products;
     }
 
-    private Map<Integer, MenuAction> makeMap(int index, String newData) {
-        Map<Integer, MenuAction> menuActions = new HashMap<>();
-        menuActions.put(1, () -> products.get(index).setName(newData));
-        menuActions.put(2, () -> products.get(index).setBrand(newData));
-        menuActions.put(3, () -> products.get(index).setType(newData));
-        menuActions.put(4, () -> products.get(index).setBarcode(newData));
-        menuActions.put(5, () -> products.get(index).setPrice(newData));
+    private void update(Product product) {
+        for (int i = 0; i < products.size(); i++) {
+            Product p = products.get(i);
+            if (p.getId().equals(product.getId())) {
+                products.set(i, product);
+                return;
+            }
+        }
+    }
 
-        return menuActions;
+    private boolean exists(Product product) {
+        return products.stream()
+                .anyMatch(p -> p.getId().equals(product.getId()));
     }
 
     private void writeData() {
         try {
-            sort();
             String json = objectMapper.writeValueAsString(products);
             Files.write(savePath, json.getBytes());
         } catch (IOException e) {
@@ -74,7 +76,6 @@ public class JsonProductRepository implements ProductRepository {
             byte[] bytes = Files.readAllBytes(savePath);
             products = objectMapper.readValue(bytes, new TypeReference<List<Product>>() {
             });
-            sort();
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
@@ -82,10 +83,6 @@ public class JsonProductRepository implements ProductRepository {
 
     private boolean dataExist() {
         return Files.exists(savePath);
-    }
-
-    private void sort() {
-        Collections.sort(products);
     }
 
 }
