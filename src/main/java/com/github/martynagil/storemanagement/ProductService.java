@@ -26,10 +26,6 @@ public class ProductService {
         productRepository.removeById(product.getId());
     }
 
-    public void modify(int index, int category, String newData) {
-        productRepository.modifyByIndex(index, category, newData);
-    }
-
     public List<Product> searchByText(String text) {
         return getAllProducts().stream()
                 .filter(product -> matchesCriteria(text, product))
