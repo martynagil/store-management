@@ -63,16 +63,64 @@ class ProductServiceTest {
     }
 
     @Test
-    void shouldSearchByText() {
-        Product product1 = new Product("kremn","krem nawilżający", "brand", "type", "barcode", 2.09);
-        Product product2 = new Product("kremp","krem przeciwzmarszczkowy", "brand", "type", "barcode", 2.09);
+    void shouldSearchByTextInName() {
+        Product product1 = new Product("scsdcs","krem nawilżający", "brand", "type", "barcode", 2.09);
+        Product product2 = new Product("ksdccsc","krem przeciwzmarszczkowy", "brand", "type", "barcode", 2.09);
         Product product3 = new Product("tonic","tonik", "brand", "type", "barcode", 2.09);
+        List<Product> products = asList(product1, product2, product3);
+        when(productRepository.findAll()).thenReturn(products);
 
-        productService.addToRepository(product1);
-        productService.addToRepository(product2);
-        productService.addToRepository(product3);
-        //when(productRepository.findAll()).thenReturn(products);
-// TODO: 30.09.2020  
+        List<Product> searchedProducts = productService.searchByText("krem");
+
+        assertThat(searchedProducts)
+                .hasSize(2)
+                .containsExactly(product1, product2);
+
+    }
+
+    @Test
+    void shouldSearchByTextInBrand() {
+        Product product1 = new Product("scsdcs","nawilżający", "my super brand", "type", "barcode", 2.09);
+        Product product2 = new Product("ksdccsc","przeciwzmarszczkowy", "my brand is extra", "type", "barcode", 2.09);
+        Product product3 = new Product("tonic","tonik", "company", "type", "barcode", 2.09);
+        List<Product> products = asList(product1, product2, product3);
+        when(productRepository.findAll()).thenReturn(products);
+
+        List<Product> searchedProducts = productService.searchByText("brand");
+
+        assertThat(searchedProducts)
+                .hasSize(2)
+                .containsExactly(product1, product2);
+
+    }
+
+    @Test
+    void shouldSearchByTextInType() {
+        Product product1 = new Product("scsdcs","nawilżający", "my super brand", "typekrem", "barcode", 2.09);
+        Product product2 = new Product("ksdccsc","przeciwzmarszczkowy", "my brand is extra", "krem", "barcode", 2.09);
+        Product product3 = new Product("tonic","tonik", "company", "2type", "barcode", 2.09);
+        List<Product> products = asList(product1, product2, product3);
+        when(productRepository.findAll()).thenReturn(products);
+
+        List<Product> searchedProducts = productService.searchByText("type");
+
+        assertThat(searchedProducts)
+                .hasSize(2)
+                .containsExactly(product1, product3);
+
+    }
+
+    @Test
+    void shouldNotSearchByText() {
+        Product product1 = new Product("scsdcs","nawilżający", "my super brand", "typekrem", "barcode", 2.09);
+        Product product2 = new Product("ksdccsc","przeciwzmarszczkowy", "my brand is extra", "krem", "barcode", 2.09);
+        Product product3 = new Product("tonic","tonik", "company", "2type", "barcode", 2.09);
+        List<Product> products = asList(product1, product2, product3);
+        when(productRepository.findAll()).thenReturn(products);
+
+        List<Product> searchedProducts = productService.searchByText("nothing");
+
+        assertThat(searchedProducts).isEmpty();
     }
 
 }
