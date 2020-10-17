@@ -82,7 +82,11 @@ public class JsonProductRepository implements ProductRepository {
     }
 
     private boolean dataExist() {
-        return Files.exists(savePath);
+        try {
+            return Files.exists(savePath) && Files.size(savePath) > 0;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
 }

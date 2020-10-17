@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Product {
@@ -70,10 +71,6 @@ public class Product {
                 '}';
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -98,5 +95,22 @@ public class Product {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Double.compare(product.price, price) == 0 &&
+                Objects.equals(id, product.id) &&
+                Objects.equals(name, product.name) &&
+                Objects.equals(brand, product.brand) &&
+                Objects.equals(type, product.type) &&
+                Objects.equals(barcode, product.barcode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, brand, type, barcode, price);
+    }
 }
 
