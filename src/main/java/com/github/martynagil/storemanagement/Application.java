@@ -18,10 +18,9 @@ public class Application {
         do {
             userInterface.printMenu();
             choice = userInterface.askForMenuChoice();
-            if (choice >= menuActions.size()) {
-                throw new IndexOutOfBoundsException();
+            if (menuActions.containsKey(choice)) {
+                menuActions.get(choice).run();
             }
-            menuActions.get(choice).run();
         } while (choice != 0);
     }
 
@@ -39,6 +38,3 @@ public class Application {
         menuActions.put(5, () -> userInterface.mModifyProduct());
     }
 }
-
-// TODO: 23.09.2020 Zrób testy, skup się na serwisie oraz repozytorium
-// TODO: 28.09.2020 obsługa błędów do wszystkiego elo

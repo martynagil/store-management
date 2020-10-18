@@ -22,7 +22,6 @@ class JsonProductRepositoryTest {
     private JsonProductRepository jsonProductRepository;
     private Path path;
     private ObjectMapper objectMapper = new ObjectMapper();
-    private List<Product> products;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -50,6 +49,54 @@ class JsonProductRepositoryTest {
         assertThat(readTempFile()).containsExactly(product1, product2);
     }
 
+    @Test
+    void shouldModifyExistingProduct() {
+        Product product = new Product("id", "name", "brand", "type", "barcode", 3.99);
+
+        jsonProductRepository.save(product);
+        Product modifiedProduct = new Product("id", "other name", "brand", "type", "barcode", 3.99);
+        jsonProductRepository.save(modifiedProduct);
+
+        assertThat(jsonProductRepository.findAll()).hasSize(1);
+        assertThat(readTempFile()).containsExactly(modifiedProduct);
+    }
+
+    @Test
+    void shouldRemove() {
+        Product product1 = new Product("name", "brand", "type", "barcode", 3.99);
+        Product product2 = new Product("name", "brand", "type", "barcode", 3.99);
+
+        jsonProductRepository.save(product1);
+        jsonProductRepository.save(product2);
+        jsonProductRepository.removeById(product1.getId());
+
+        assertThat(jsonProductRepository.findAll()).doesNotContain(product1);
+        assertThat(jsonProductRepository.findAll()).hasSize(1);
+    }
+
+    @Test
+    void shouldNotRemove() {
+        Product product = new Product("id", "name", "brand", "type", "barcode", 3.99);
+
+        jsonProductRepository.save(product);
+        jsonProductRepository.removeById("other id");
+
+        assertThat(jsonProductRepository.findAll()).hasSize(1);
+    }
+
+    @Test
+    void shouldLoad() throws IOException {
+        File tempFileLoad = File.createTempFile("loadTest", ".json");
+        Path pathLoad = Paths.get(tempFileLoad.getAbsolutePath());
+        JsonProductRepository jsonProductRepositoryToLoad = new JsonProductRepository(pathLoad);
+        Product product = new Product("id", "name", "brand", "type", "barcode", 3.99);
+
+        jsonProductRepositoryToLoad.save(product);
+        JsonProductRepository jsonProductRepositoryLoadTest = new JsonProductRepository(pathLoad);
+
+        assertThat(jsonProductRepositoryToLoad.findAll()).isEqualTo(jsonProductRepositoryLoadTest.findAll());
+    }
+
     private List<Product> readTempFile() {
         try {
             byte[] bytes = Files.readAllBytes(path);
@@ -59,5 +106,4 @@ class JsonProductRepositoryTest {
             throw new IllegalStateException(e);
         }
     }
-
 }
