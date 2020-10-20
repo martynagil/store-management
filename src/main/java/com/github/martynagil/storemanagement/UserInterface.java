@@ -18,7 +18,7 @@ public class UserInterface {
     }
 
     public void mShowProducts() {
-        showProducts(productService.getAllProducts());
+        showSortedProducts(productService.getAllProducts());
     }
 
     public void mAddProduct() {
@@ -29,29 +29,33 @@ public class UserInterface {
         double price = console.askForDouble("Enter the price: ");
         Product product = new Product(name, brand, type, barcode, price);
 
-        productService.addToRepository(product);
+        productService.save(product);
     }
 
     public void mDeleteProduct() {
         List<Product> products = productService.getAllProducts();
-        products.sort(PRODUCT_COMPARATOR);
-        showProducts(products);
+        showSortedProducts(products);
         int index = console.askForInt("Enter the index: ");
         productService.remove(products.get(index - 1));
     }
 
     public void mSearchProduct() {
-        showProducts(searchProducts());
+        showSortedProducts(searchProducts());
     }
 
     public void mModifyProduct() {
         List<Product> products = searchProducts();
-        showProducts(products);
+        showSortedProducts(products);
         int productIndex = console.askForInt("Enter the index: ");
         Product product = products.get(productIndex - 1);
         console.printAttributes();
         int attribute = console.askForInt("Choose attribute to change: ");
         String newData = console.askForString("Enter what do you want to change the data for: ");
+        modify(product, attribute, newData);
+        productService.save(product);
+    }
+
+    private void modify(Product product, int attribute, String newData) {
         switch (attribute) {
             case 1:
                 product.setName(newData);
@@ -71,8 +75,6 @@ public class UserInterface {
             default:
                 throw new IndexOutOfBoundsException();
         }
-
-        productService.save(product);
     }
 
     public void mExit() {
@@ -87,7 +89,7 @@ public class UserInterface {
         return console.askForInt("Your choice:");
     }
 
-    private void showProducts(List<Product> products) {
+    private void showSortedProducts(List<Product> products) {
         products.sort(PRODUCT_COMPARATOR);
         int index = 1;
         for (Product product : products) {
@@ -97,28 +99,8 @@ public class UserInterface {
         System.out.println();
     }
 
-    private int chooseItem(List<Product> list) {
-        int choice;
-        if (list.size() == 0) {
-            return 0;
-        }
-        choice = console.askForInt("Enter your choice") - 1;
-        if (choice >= list.size()) {
-            throw new IndexOutOfBoundsException();
-        }
-        return choice;
-    }
-
     private List<Product> searchProducts() {
         String text = console.askForString("Enter search: ");
         return productService.searchByText(text);
-    }
-
-    private int indexFromId(String id) {
-        int index = 0;
-        while (!productService.getAllProducts().get(index).getId().equals(id)) {
-            index++;
-        }
-        return index;
     }
 }

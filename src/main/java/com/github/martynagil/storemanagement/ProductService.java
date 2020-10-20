@@ -18,10 +18,6 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public void addToRepository(Product product) {
-        productRepository.save(product);
-    }
-
     public void remove(Product product) {
         productRepository.removeById(product.getId());
     }
@@ -33,9 +29,10 @@ public class ProductService {
     }
 
     private boolean matchesCriteria(String text, Product product) {
-        return product.getName().toLowerCase().contains((text).toLowerCase())
-                || product.getBrand().toLowerCase().contains((text).toLowerCase())
-                || product.getType().toLowerCase().contains((text).toLowerCase());
+        String searchText = text.toLowerCase();
+        return product.getName().toLowerCase().contains(searchText)
+                || product.getBrand().toLowerCase().contains(searchText)
+                || product.getType().toLowerCase().contains(searchText);
     }
 
     public void save(Product product) {

@@ -4,11 +4,7 @@ import com.github.martynagil.storemanagement.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -57,7 +53,7 @@ class ProductServiceTest {
     void shouldAddProductToRepository() {
         Product product = new Product("id","name", "brand", "type", "barcode", 2.09);
 
-        productService.addToRepository(product);
+        productService.save(product);
 
         verify(productRepository).save(product);
     }
@@ -111,7 +107,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void shouldNotSearchByText() {
+    void shouldNotSearchByNonExistingText() {
         Product product1 = new Product("scsdcs","nawilżający", "my super brand", "typekrem", "barcode", 2.09);
         Product product2 = new Product("ksdccsc","przeciwzmarszczkowy", "my brand is extra", "krem", "barcode", 2.09);
         Product product3 = new Product("tonic","tonik", "company", "2type", "barcode", 2.09);
