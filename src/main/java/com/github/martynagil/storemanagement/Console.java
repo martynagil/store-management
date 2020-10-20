@@ -16,6 +16,15 @@ public class Console {
         System.out.println();
     }
 
+    public void printAttributes() {
+        System.out.println("[1] Name of product");
+        System.out.println("[2] Name of brand");
+        System.out.println("[3] Type");
+        System.out.println("[4] Barcode");
+        System.out.println("[5] Price");
+        System.out.println();
+    }
+
     public void printGoodbye() {
         System.out.println("Goodbye!");
     }

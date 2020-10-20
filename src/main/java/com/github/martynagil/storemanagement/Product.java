@@ -2,8 +2,9 @@ package com.github.martynagil.storemanagement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import org.apache.commons.lang3.builder.CompareToBuilder;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Product {
@@ -69,6 +70,47 @@ public class Product {
                 ", price=" + price +
                 '}';
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public void setPrice(String cost) {
+        try {
+            price = Double.parseDouble(cost);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Number required", e);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Double.compare(product.price, price) == 0 &&
+                Objects.equals(id, product.id) &&
+                Objects.equals(name, product.name) &&
+                Objects.equals(brand, product.brand) &&
+                Objects.equals(type, product.type) &&
+                Objects.equals(barcode, product.barcode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, brand, type, barcode, price);
+    }
 }
 
-// uuid

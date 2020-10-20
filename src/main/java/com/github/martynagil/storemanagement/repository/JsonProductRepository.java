@@ -2,14 +2,16 @@ package com.github.martynagil.storemanagement.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.martynagil.storemanagement.MenuAction;
 import com.github.martynagil.storemanagement.Product;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class JsonProductRepository implements ProductRepository {
 
@@ -25,20 +27,39 @@ public class JsonProductRepository implements ProductRepository {
     }
 
     @Override
-    public void removeByIndex(int index) {
-        products.remove(index);
+    public void removeById(String id) {
+        products.removeIf(product -> product.getId().equals(id));
         writeData();
     }
 
     @Override
     public void save(Product product) {
-        products.add(product);
+        if (exists(product)) {
+            update(product);
+        } else {
+            products.add(product);
+        }
         writeData();
     }
 
     @Override
     public List<Product> findAll() {
         return products;
+    }
+
+    private void update(Product product) {
+        for (int i = 0; i < products.size(); i++) {
+            Product p = products.get(i);
+            if (p.getId().equals(product.getId())) {
+                products.set(i, product);
+                return;
+            }
+        }
+    }
+
+    private boolean exists(Product product) {
+        return products.stream()
+                .anyMatch(p -> p.getId().equals(product.getId()));
     }
 
     private void writeData() {
@@ -53,14 +74,19 @@ public class JsonProductRepository implements ProductRepository {
     private void loadData() {
         try {
             byte[] bytes = Files.readAllBytes(savePath);
-            products = objectMapper.readValue(bytes, new TypeReference<List<Product>>() {});
+            products = objectMapper.readValue(bytes, new TypeReference<List<Product>>() {
+            });
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
     }
 
     private boolean dataExist() {
-        return Files.exists(savePath);
+        try {
+            return Files.exists(savePath) && Files.size(savePath) > 0;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
 }
