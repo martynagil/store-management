@@ -18,18 +18,23 @@ public class Application {
         do {
             userInterface.printMenu();
             choice = userInterface.askForMenuChoice();
-            menuActions.get(choice).run();
+            if (menuActions.containsKey(choice)) {
+                menuActions.get(choice).run();
+            }
         } while (choice != 0);
     }
 
     private void initMenu() {
-        menuActions.put(0, () -> userInterface.exit());
-        menuActions.put(1, () -> userInterface.showProducts());
-        menuActions.put(2, () -> userInterface.addProduct());
-        menuActions.put(3, () -> userInterface.deleteProduct());
+        menuActions.put(0, new MenuAction() {
+            @Override
+            public void run() {
+                userInterface.mExit();
+            }
+        });
+        menuActions.put(1, () -> userInterface.mShowProducts());
+        menuActions.put(2, () -> userInterface.mAddProduct());
+        menuActions.put(3, () -> userInterface.mDeleteProduct());
+        menuActions.put(4, () -> userInterface.mSearchProduct());
+        menuActions.put(5, () -> userInterface.mModifyProduct());
     }
 }
-
-// TODO: 03.09.2020 czy plik ma zawartość
-// TODO: 02.09.2020 pooglądać na youtube o mockito
-// TODO: 29.08.2020 zmodyfikować metodę save o parametr mówiący o folderze, żeby się nie nadpisywało

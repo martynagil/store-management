@@ -11,13 +11,18 @@ public class Console {
         System.out.println("[1] Show products");
         System.out.println("[2] Add product");
         System.out.println("[3] Delete product");
+        System.out.println("[4] Search product");
         System.out.println("[0] Exit");
         System.out.println();
-        System.out.println("Your choice:");
     }
 
-    public int askForMenuChoice() {
-       return scanner.nextInt();
+    public void printAttributes() {
+        System.out.println("[1] Name of product");
+        System.out.println("[2] Name of brand");
+        System.out.println("[3] Type");
+        System.out.println("[4] Barcode");
+        System.out.println("[5] Price");
+        System.out.println();
     }
 
     public void printGoodbye() {
@@ -31,12 +36,14 @@ public class Console {
 
     public double askForDouble(String message) {
         System.out.println(message);
-        return scanner.nextDouble();
+        String string = scanner.nextLine();
+        return Double.parseDouble(string);
     }
 
     public int askForInt(String message) {
         System.out.println(message);
-        return scanner.nextInt();
+        String string = scanner.nextLine();
+        return Integer.parseInt(string);
     }
 
     public void writeMessage(String msg) {
